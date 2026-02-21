@@ -16,12 +16,12 @@ function getGrade(marks) {
 // Get grade points based on grade
 function getGradePoints(grade) {
     const gradePoints = {
-        'O': 4.0,
-        'A+': 3.75,
-        'A': 3.5,
-        'B+': 3.0,
-        'B': 2.5,
-        'C': 2.0,
+        'O': 10,
+        'A+': 9,
+        'A': 8,
+        'B+': 7,
+        'B': 6,
+        'C': 5,
         '-': 0
     };
     return gradePoints[grade] || 0;
