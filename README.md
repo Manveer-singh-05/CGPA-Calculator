@@ -1,0 +1,1 @@
+calculate cgpa easier way
