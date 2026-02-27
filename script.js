@@ -3,7 +3,7 @@ let courseCount = 0;
 // Grade mapping based on marks
 function getGrade(marks) {
     const marksNum = parseInt(marks);
-    
+
     if (marksNum >= 90 && marksNum <= 100) return 'O';
     if (marksNum >= 80 && marksNum < 90) return 'A+';
     if (marksNum >= 70 && marksNum < 80) return 'A';
@@ -31,11 +31,11 @@ function getGradePoints(grade) {
 function addCourse() {
     const container = document.getElementById('coursesContainer');
     courseCount++;
-    
+
     const courseDiv = document.createElement('div');
     courseDiv.className = 'course-item';
     courseDiv.id = `course-${courseCount}`;
-    
+
     courseDiv.innerHTML = `
         <h3>Course ${courseCount}</h3>
         <div class="course-info">
@@ -53,20 +53,30 @@ function addCourse() {
                     <option value="4">4</option>
                 </select>
             </div>
-            <div class="grade-display" id="grade-${courseCount}">-</div>
-            <div class="grade-points" id="points-${courseCount}">0.0</div>
+            <div class="displays-wrapper">
+                <div class="display-box">
+                    <div class="display-label">Grade</div>
+                    <div class="grade-display" id="grade-${courseCount}">-</div>
+                </div>
+                <div class="display-box">
+                    <div class="display-label">Points</div>
+                    <div class="grade-points" id="points-${courseCount}">0.0</div>
+                </div>
+            </div>
         </div>
-        <button class="btn-remove" onclick="removeCourse(${courseCount})">✕</button>
+        <button class="btn-remove" onclick="removeCourse(${courseCount})" title="Remove Course">
+            <i class="ph ph-trash"></i>
+        </button>
     `;
-    
+
     container.appendChild(courseDiv);
-    
+
     // Add event listeners to update grade points when marks or credits change
-    document.getElementById(`marks-${courseCount}`).addEventListener('input', function() {
+    document.getElementById(`marks-${courseCount}`).addEventListener('input', function () {
         updateGradeDisplay(courseCount);
     });
-    
-    document.getElementById(`credits-${courseCount}`).addEventListener('change', function() {
+
+    document.getElementById(`credits-${courseCount}`).addEventListener('change', function () {
         updateGradeDisplay(courseCount);
     });
 }
@@ -77,7 +87,7 @@ function updateGradeDisplay(courseNum) {
     const creditsInput = document.getElementById(`credits-${courseNum}`);
     const gradeDisplay = document.getElementById(`grade-${courseNum}`);
     const pointsDisplay = document.getElementById(`points-${courseNum}`);
-    
+
     if (marksInput.value !== '') {
         const grade = getGrade(marksInput.value);
         const basePoints = getGradePoints(grade);
@@ -103,39 +113,39 @@ function removeCourse(courseNum) {
 function calculateCGPA() {
     const container = document.getElementById('coursesContainer');
     const courses = container.querySelectorAll('.course-item');
-    
+
     if (courses.length === 0) {
         alert('Please add at least one course!');
         return;
     }
-    
+
     let totalGradePoints = 0;
     let totalCredits = 0;
     let validCourses = 0;
-    
+
     courses.forEach(course => {
         const courseId = course.id.split('-')[1];
         const marks = document.getElementById(`marks-${courseId}`).value;
         const credits = document.getElementById(`credits-${courseId}`).value;
-        
+
         if (marks !== '' && credits !== '') {
             const grade = getGrade(marks);
             const baseGradePoints = getGradePoints(grade);
             const creditNum = parseInt(credits);
-            
+
             totalGradePoints += (baseGradePoints * creditNum);
             totalCredits += creditNum;
             validCourses++;
         }
     });
-    
+
     if (validCourses === 0) {
         alert('Please fill in marks and credits for at least one course!');
         return;
     }
-    
+
     const cgpa = totalGradePoints / totalCredits;
-    
+
     // Display result
     document.getElementById('cgpaValue').textContent = cgpa.toFixed(2);
     document.getElementById('creditSummary').textContent = `Total Credits: ${totalCredits} | Valid Courses: ${validCourses}`;
@@ -150,6 +160,6 @@ function resetCalculator() {
 }
 
 // Add first course on page load
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     addCourse();
 });
